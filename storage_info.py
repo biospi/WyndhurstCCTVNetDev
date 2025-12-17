@@ -12,6 +12,7 @@ from matplotlib.patches import Patch
 
 matplotlib.use("Agg")  # Use a non-interactive backend
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 
 from utils import is_float, MAP
 
@@ -184,8 +185,13 @@ def get_ffmpeg_durations(videos):
 #     plt.savefig(total_filepath, bbox_inches='tight', dpi=600)
 
 
-def main():
-    mp4_files = list(Path("/mnt/storage/cctvnet/").rglob("*.mp4"))
+def main(input_dir):
+    mp4_files = list(input_dir.rglob("*.mp4"))
+    # for f in mp4_files:
+    #     if "66.26" not in str(f):
+    #         continue
+    #     print(f)
+
     print(f"Found {len(mp4_files)} files.")
     df = pd.DataFrame(mp4_files, columns=['FilePath'])
     df['FileSizeBytes'] = df['FilePath'].apply(lambda x: x.stat().st_size)
@@ -227,13 +233,14 @@ def main():
     # Transpose heatmap: Dates on Y-axis, IPs on X-axis
     heatmap_data = df_data.pivot_table(index='date', columns='ip', values='storage')
 
-    plt.figure(figsize=(18, 10))  # Swap aspect ratio for landscape format
+    plt.figure(figsize=(18, 20))
     ip_order = [f"66.{x}" for x in df_data['ip_id'].unique().tolist()]
     heatmap_data.columns = pd.Categorical(heatmap_data.columns, categories=ip_order, ordered=True)
     heatmap_data = heatmap_data.sort_index(axis=1)
 
     ax = sns.heatmap(heatmap_data, annot=True, cmap="viridis", fmt=".0f", cbar_kws={'label': 'Storage (GB)'})
-    ax.set_yticklabels(heatmap_data.index.strftime('%d-%m-%Y'))
+    #ax.set_yticklabels(heatmap_data.index.strftime('%d-%m-%Y'))
+    #ax.yaxis.set_major_formatter(mdates.DateFormatter('%d-%m-%Y'))
     plt.title(f'Storage Usage Heatmap | HIKVISION ({len(HIKVISION)}) HANWHA ({len(HANWHA)})')
     plt.ylabel('Date')
     plt.xlabel('IP')
@@ -292,4 +299,5 @@ def main():
     # plt.savefig(total_filepath, bbox_inches='tight', dpi=600)
 
 if __name__ == "__main__":
-    main()
+    main(Path("/mnt/usb_storage/cctvnet/"))
+    #main(Path("/mnt/storage/cctvnet/"))
