@@ -362,9 +362,3 @@ fig.update_yaxes(title_text="m/s²", row=2, col=2)
 st.plotly_chart(fig, use_container_width=True)
 
 
-#to mount joc1 from dev
-# sudo sshfs fo18103@it106570.users.bris.ac.uk:/mnt /mnt/joc1 -o allow_other -o default_permissions -o umask=022
-# sudo sshfs uobcam@10.70.66.157:/mnt /mnt/pi \
-#     -o allow_other \
-#     -o default_permissions \
-#     -o umask=022

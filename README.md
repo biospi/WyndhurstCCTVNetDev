@@ -142,6 +142,21 @@ This:
 streamlit run frontend.py --server.port 8501
 ```
 
+**to mount joc1 from dev.biospi (Dev workstation)**
+
+### File browser
+
+The dashboard provide a file browser that allows the user to navigate across all storage available
+
+```bash
+sudo sshfs fo18103@it106570.users.bris.ac.uk:/mnt /mnt/joc1 -o allow_other -o default_permissions -o umask=022
+```
+
+**to mount UoBcam from dev.biospi (Dev workstation)**
+```bash
+sudo sshfs uobcam@10.70.66.157:/mnt /mnt/pi -o allow_other -o default_permissions -o umask=022
+```
+
 ---
 
 ## Frontend Synchronisation (`update_front_end.py`)
